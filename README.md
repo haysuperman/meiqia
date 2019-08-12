@@ -4,12 +4,16 @@
 a flutter plugin for meiqiaSDK
 
 ## Getting Started
-
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+初始化
+ ```dart
+MeiqiaPlugin.initMeiQia("YourAppKey");
+ ```
+ 跳转聊天界面
+ ```dart
+   MeiqiaPlugin.chat(userID: "userId", userInfo: {
+                      "name": "柚子",
+                      "gender": "男",
+                      "tel": "18867626276",
+                      "comment":"备注信息"
+                    });
+ ```
