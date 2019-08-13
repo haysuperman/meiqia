@@ -1,8 +1,8 @@
 name: meiqia_plugin
 description: A new flutter plugin project for MeiQiaSDK.
-version: 0.0.1
-author: Yuzu__
-homepage:
+version: 0.0.2
+author: Yuzu__ <niansi.no@gmail.com>
+homepage: https://github.com/YuzuWang/meiqia
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

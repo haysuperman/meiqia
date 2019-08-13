@@ -52,7 +52,11 @@ class _MyAppState extends State<MyApp> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    MeiqiaPlugin.initMeiQia("0aff2f19280aa0c2dfa2cc12425a71fd");
+                    MeiqiaPlugin.initMeiQia("0aff2f19280aa0c2dfa2cc12425a71fd",success: (code,msg) {
+                      print("成功------------ $msg -- $code");
+                    },failure: (code,msg) {
+                      print("失败------------ $msg -- $code");
+                    });
                   },
                   child: Container(
                       height: 50,

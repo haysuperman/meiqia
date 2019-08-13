@@ -8,12 +8,25 @@ static NSString const *kMethodChat = @"goToChat";
 static NSString const *kMethodOpenMQServe = @"openMeiQiaServe";
 static NSString const *kMethodCloseMQServe = @"closeMeiQiaServe";
 
+@interface MeiqiaPlugin()
+@property(nonatomic, strong) FlutterMethodChannel *channel;
+@end
+
 @implementation MeiqiaPlugin
+- (instancetype)initWithChannel:(FlutterMethodChannel *)channel
+{
+    self = [super init];
+    if (self) {
+        _channel = channel;
+    }
+    return self;
+}
+
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     FlutterMethodChannel* channel = [FlutterMethodChannel
                                      methodChannelWithName:@"meiqia_plugin"
                                      binaryMessenger:[registrar messenger]];
-    MeiqiaPlugin* instance = [[MeiqiaPlugin alloc] init];
+    MeiqiaPlugin* instance = [[MeiqiaPlugin alloc] initWithChannel:channel];
     [registrar addMethodCallDelegate:instance channel:channel];
 }
 
@@ -44,11 +57,14 @@ static NSString const *kMethodCloseMQServe = @"closeMeiQiaServe";
 }
 
 -(void)initSDKWithAppKey:(NSString *)appKey result:(FlutterResult)result {
+    __weak __typeof(self)weakSelf = self;
     [MQManager initWithAppkey:appKey completion:^(NSString *clientId, NSError *error) {
+        __strong __typeof(weakSelf)strongSelf = weakSelf;
         if (!error) {
+            [strongSelf.channel invokeMethod:@"initialResult" arguments:@{@"code":@"1",@"msg":@"注册成功"}];
             result(@{@"code":@"1",@"msg":@"初始化成功"});
         } else {
-            NSLog(@"error:%@",error);
+            [strongSelf.channel invokeMethod:@"initialResult" arguments:@{@"code":@"-1",@"msg":@"注册失败"}];
             result(@{@"code":@"-1",@"msg":[error description]});
         }
     }];

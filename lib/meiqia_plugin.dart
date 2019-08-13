@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
+typedef CommonResultCallback = Function(int code, String msg);
+
 class MeiqiaPlugin {
   static const MethodChannel _channel = const MethodChannel('meiqia_plugin');
 
@@ -11,9 +13,25 @@ class MeiqiaPlugin {
   }
 
   // 初始化SDK
-  static Future<MeiQiaResult> initMeiQia(String appKey) async {
-    Map result = await _channel.invokeMethod("register", {"appKey": appKey});
-    return MeiQiaResult(result["code"], result["msg"]);
+  static Future<dynamic> initMeiQia(String appKey,
+      {CommonResultCallback success, CommonResultCallback failure}) async {
+    _channel.setMethodCallHandler((MethodCall call) {
+      if ("initialResult" == call.method) {
+        /// 状态码
+        ///
+        /// -1：失败  1：成功
+        /// {
+        ///   "code":1,
+        ///   "msg":"注册成功"
+        ///  }
+        Map result = call.arguments;
+        handleInitialResult(result, success, failure);
+      }
+      return null;
+    });
+    dynamic object =
+        await _channel.invokeMethod("register", {"appKey": appKey});
+    return object;
   }
 
   /*
@@ -36,7 +54,18 @@ class MeiqiaPlugin {
   // 进入聊天界面
   static Future<MeiQiaResult> chat(
       {String userID, Map<String, String> userInfo}) async {
-    await _channel.invokeMethod("goToChat", {"id": userID, "userInfo": userInfo});
+    await _channel
+        .invokeMethod("goToChat", {"id": userID, "userInfo": userInfo});
+  }
+
+  static handleInitialResult(
+      Map result, CommonResultCallback success, CommonResultCallback failure) {
+    int code = int.parse(result["code"]);
+    if (code == 1) {
+      if (success != null) success(code, result["msg"]);
+    } else {
+      if (failure != null) failure(code, result["msg"]);
+    }
   }
 }
 
