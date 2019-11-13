@@ -15,8 +15,9 @@ A new flutter plugin project.
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  s.dependency 'Meiqia'
-
+  s.dependency 'Meiqia', '~> 3.5.0'
+  # s.dependency 'Meiqia'
+  
   s.ios.deployment_target = '8.0'
 end
 
