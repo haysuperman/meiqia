@@ -85,7 +85,8 @@ static NSString const *kMethodCloseMQServe = @"closeMeiQiaServe";
     
     [chatViewManager enableSyncServerMessage:true];
     [chatViewManager setoutgoingDefaultAvatarImage:[UIImage imageNamed:@"meiqia-icon"]];
-    [chatViewManager pushMQChatViewControllerInViewController:viewController];
+//    [chatViewManager pushMQChatViewControllerInViewController:viewController];
+    [chatViewManager presentMQChatViewControllerInViewController:viewController];
 }
 
 @end
